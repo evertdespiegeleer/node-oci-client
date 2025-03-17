@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+  "eslint.format.enable": true,
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  }
+}

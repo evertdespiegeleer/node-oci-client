@@ -1,0 +1,20 @@
+{
+  "name": "oci-client",
+  "type": "module",
+  "author": "Evert De Spiegeleer",
+  "license": "ISC",
+  "description": "Node client to pull from OCI Registries",
+  "version": "0.0.1",
+  "main": "./dist/main.js",
+  "types": "./dist/main.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  }
+}
