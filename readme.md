@@ -2,7 +2,7 @@ Simple node.js client to pull from [OCI](https://opencontainers.org/) registries
 
 # Example usage
 ```ts
-import { Registry } from 'oci-client';
+import { Registry } from "oci-client";
 
 const registry = Registry.from({
   connectionString: "oci://username:password@registry",
