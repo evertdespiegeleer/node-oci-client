@@ -182,11 +182,9 @@ export class Registry {
     for (const [index, layer] of manifest.layers.entries()) {
       try {
         const result = await this.fetchLayer(layer, repository);
-        console.log(`Successfully fetched content from layer ${index}`);
         return result;
       } catch (error) {
         errors.push(error as Error);
-        console.log(`Error in layer ${index}: ${(error as Error).message}`);
       }
     }
 
