@@ -1,26 +1,18 @@
-Simple node.js client to pull from [OCI](https://opencontainers.org/) registries (v2).
-
-# Example usage
-```ts
 import {
     fetchBlob,
     getAuthFromConfigFile,
     getImageReferenceParameters,
-} from "oci-client";
+} from "../src/main.ts";
 
 const ref = "oci://registry.example.com/repository:tag";
 const { registry } = getImageReferenceParameters(ref);
 
-const blob = await fetchBlob(
-    "oci://registry.example.com/repository:tag",
-    undefined,
-    {
-        authentication: getAuthFromConfigFile(
-            "/home/.docker/config.json",
-            registry,
-        ),
-    },
-);
+const blob = await fetchBlob(ref, undefined, {
+    authentication: getAuthFromConfigFile(
+        "/home/.docker/config.json",
+        registry,
+    ),
+});
 
 type ExpectedArtifactDataType = {
     fruits: {
@@ -35,6 +27,3 @@ type ExpectedArtifactDataType = {
 const response = JSON.parse(await blob.text()) as ExpectedArtifactDataType;
 
 console.log(response.fruits);
-
-```
-
