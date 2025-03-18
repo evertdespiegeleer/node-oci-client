@@ -1,13 +1,13 @@
 import { DecompressionStream } from "node:stream/web";
+import type {
+  ConfigFileRegistryAuthentication,
+  RegistryAuthentication,
+} from "./types.ts";
+import { getAuthFromConfigFile } from "./parse-auth-config-file.ts";
 
 interface RegistryOptions {
   registry: string;
-  authentication: {
-    username: string;
-    password: string;
-  } | {
-    auth: string;
-  };
+  authentication?: RegistryAuthentication | ConfigFileRegistryAuthentication;
 }
 
 type RegistryFromOptions = {
@@ -33,7 +33,8 @@ interface Manifest {
 
 export class Registry {
   private registry: string;
-  private auth: string;
+  private auth?: string;
+  private authHeaders?: Record<string, string>;
 
   static from(fromOptions: RegistryFromOptions) {
     if ("connectionString" in fromOptions) {
@@ -61,16 +62,34 @@ export class Registry {
 
   constructor(options: RegistryOptions) {
     this.registry = options.registry;
-    // Base64 encode the credentials
-    if ("auth" in options.authentication) {
-      this.auth = options.authentication.auth;
-    } else {
-      this.auth = Buffer.from(
-        `${options.authentication.username}:${options.authentication.password}`,
-      )
-        .toString(
-          "base64",
+
+    let auth: RegistryAuthentication | undefined;
+    if (options.authentication != null) {
+      if ("configFilePath" in options.authentication) {
+        auth = getAuthFromConfigFile(
+          options.authentication.configFilePath,
+          this.registry,
         );
+      } else {
+        auth = options.authentication!;
+      }
+
+      if ("auth" in auth) {
+        this.auth = auth.auth;
+      } else if (
+        "username" in auth &&
+        auth.username != null
+      ) {
+        this.auth = Buffer.from(
+          `${auth.username}:${auth.password}`,
+        )
+          .toString(
+            "base64",
+          );
+        this.authHeaders = {
+          "Authorization": `Basic ${this.auth}`,
+        };
+      }
     }
   }
 
@@ -83,7 +102,7 @@ export class Registry {
 
     const manifestResponse = await fetch(manifestUrl, {
       headers: {
-        "Authorization": `Basic ${this.auth}`,
+        ...this.authHeaders,
         "Accept": "application/vnd.docker.distribution.manifest.v2+json",
       },
     });
@@ -114,7 +133,7 @@ export class Registry {
       `https://${this.registry}/v2/${repository}/blobs/${layerDigest}`;
     const blobResponse = await fetch(blobUrl, {
       headers: {
-        "Authorization": `Basic ${this.auth}`,
+        ...this.authHeaders,
       },
     });
 

@@ -8,13 +8,14 @@
     "url": "git+https://github.com/evertdespiegeleer/node-oci-client.git",
     "type": "git"
   },
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
+    "init": "git config --local core.hooksPath ./.hooks",
     "build": "tsc -p ./tsconfig.json"
   },
   "devDependencies": {
