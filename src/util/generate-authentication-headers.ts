@@ -2,8 +2,8 @@ import type { RegistryAuthentication } from "../types.ts";
 
 export const generateAuthenticationHeaders = (
     auth?: RegistryAuthentication,
-): Record<string, string> => {
-    if (auth == null) return {};
+): Record<string, string> | undefined => {
+    if (auth == null) return undefined;
 
     if ("auth" in auth && auth.auth != null) {
         return {

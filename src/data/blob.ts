@@ -22,7 +22,20 @@ export async function fetchBlob(
 ): Promise<Blob> {
     const imageRefParams = getImageReferenceParameters(ref);
 
-    const manifest = await getManifest(ref);
+    let authentication = options?.authentication;
+    if (
+        authentication == null &&
+        (imageRefParams.username != null && imageRefParams.password != null)
+    ) {
+        authentication = {
+            username: imageRefParams.username,
+            password: imageRefParams.password,
+        };
+    }
+
+    const manifest = await getManifest(ref, {
+        authentication,
+    });
 
     // Handle the case where a specific layer is requested
     if (layerIndex !== undefined) {
@@ -42,7 +55,9 @@ export async function fetchBlob(
             imageRefParams.registry,
             imageRefParams.repository,
             manifest.layers[layerIndex],
-            options,
+            {
+                authentication,
+            },
         );
     }
 
@@ -55,7 +70,9 @@ export async function fetchBlob(
                 imageRefParams.registry,
                 imageRefParams.repository,
                 layer,
-                options,
+                {
+                    authentication,
+                },
             );
             return result;
         } catch (error) {

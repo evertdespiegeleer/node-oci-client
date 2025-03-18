@@ -19,12 +19,23 @@ export async function getManifest(
 ): Promise<Manifest> {
     const imageRefParams = getImageReferenceParameters(ref);
 
+    let authHeaders = generateAuthenticationHeaders(options?.authentication);
+    if (
+        authHeaders == null &&
+        (imageRefParams.username != null && imageRefParams.password != null)
+    ) {
+        generateAuthenticationHeaders({
+            username: imageRefParams.username,
+            password: imageRefParams.password,
+        });
+    }
+
     const manifestUrl =
         `https://${imageRefParams.registry}/v2/${imageRefParams.repository}/manifests/${imageRefParams.reference}`;
 
     const manifestResponse = await fetch(manifestUrl, {
         headers: {
-            ...generateAuthenticationHeaders(options?.authentication),
+            ...authHeaders,
             "Accept": "application/vnd.docker.distribution.manifest.v2+json",
         },
     });
