@@ -10,10 +10,10 @@ export const parseOciUri = (ociUri: string) => {
 
     const repository = match?.[1];
     const reference = match?.[2];
-    const { username, password, host, port } = url;
+    const { username, password, host } = url;
 
     return {
-        registry: [host, port].join(":"),
+        registry: host,
         repository,
         reference,
         username: username || undefined,
