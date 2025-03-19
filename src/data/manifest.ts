@@ -8,7 +8,6 @@ import { generateAuthenticationHeaders } from "../util/generate-authentication-h
 
 interface GetManifestOptions {
     authentication?: RegistryAuthentication;
-    useSSL?: boolean;
 }
 
 /**
@@ -19,7 +18,10 @@ export async function getManifest(
     options?: GetManifestOptions,
 ): Promise<Manifest> {
     const imageRefParams = getImageReferenceParameters(ref);
-    const fetchProtocol = options?.useSSL === false ? "http" : "https";
+
+    const registryPort =
+        new URL(`dummyprotocol://${imageRefParams.registry}`).port || 443;
+    const fetchProtocol = registryPort === 443 ? "https:" : "http:";
 
     let authHeaders = generateAuthenticationHeaders(options?.authentication);
     if (

@@ -3,7 +3,6 @@ import { generateAuthenticationHeaders } from "../util/generate-authentication-h
 
 interface FetchLayerOptions {
     authentication?: RegistryAuthentication;
-    useSSL?: boolean;
 }
 
 /**
@@ -21,7 +20,8 @@ export async function fetchLayer(
     const mediaType = layer.mediaType;
     const isCompressed = mediaType.includes("gzip");
 
-    const fetchProtocol = options?.useSSL === false ? "http" : "https";
+    const registryPort = new URL(`dummyprotocol://${registry}`).port || 443;
+    const fetchProtocol = registryPort === 443 ? "https:" : "http:";
 
     const blobUrl =
         `${fetchProtocol}//${registry}/v2/${repository}/blobs/${layerDigest}`;
