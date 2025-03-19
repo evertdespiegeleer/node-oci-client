@@ -40,7 +40,10 @@ export async function getManifest(
     const manifestResponse = await fetch(manifestUrl, {
         headers: {
             ...authHeaders,
-            "Accept": "application/vnd.docker.distribution.manifest.v2+json",
+            "Accept": [
+                "application/vnd.oci.image.manifest.v1+json",
+                "application/vnd.oci.image.index.v1+json",
+            ],
         },
     });
 
