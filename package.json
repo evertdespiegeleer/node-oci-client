@@ -8,7 +8,7 @@
     "url": "git+https://github.com/evertdespiegeleer/node-oci-client.git",
     "type": "git"
   },
-  "version": "0.0.9",
+  "version": "0.0.10",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
   "files": [

@@ -8,6 +8,7 @@ import { generateAuthenticationHeaders } from "../util/generate-authentication-h
 
 interface GetManifestOptions {
     authentication?: RegistryAuthentication;
+    useSSL?: boolean;
 }
 
 /**
@@ -18,6 +19,7 @@ export async function getManifest(
     options?: GetManifestOptions,
 ): Promise<Manifest> {
     const imageRefParams = getImageReferenceParameters(ref);
+    const fetchProtocol = options?.useSSL === false ? "http" : "https";
 
     let authHeaders = generateAuthenticationHeaders(options?.authentication);
     if (
@@ -31,7 +33,7 @@ export async function getManifest(
     }
 
     const manifestUrl =
-        `https://${imageRefParams.registry}/v2/${imageRefParams.repository}/manifests/${imageRefParams.reference}`;
+        `${fetchProtocol}//${imageRefParams.registry}/v2/${imageRefParams.repository}/manifests/${imageRefParams.reference}`;
 
     const manifestResponse = await fetch(manifestUrl, {
         headers: {
