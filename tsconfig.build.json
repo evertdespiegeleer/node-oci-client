@@ -1,0 +1,10 @@
+// Based on https://www.totaltypescript.com/tsconfig-cheat-sheet and https://2ality.com/2025/01/nodejs-strip-type.html#tsconfig.json
+{
+    "extends": "./tsconfig.json",
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "src/**/tests/**/*.ts"
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "reporter": [
+        "html",
+        "text"
+    ],
+    "exclude": [
+        "src/**/*.test.*",
+        "src/**/*.spec.*",
+        "src/**/test/**/*",
+        "src/**/spec/**/*",
+        "src/**/tests/**/*",
+        "src/**/specs/**/*"
+    ],
+    "lines": 95,
+    "branches": 82,
+    "statements": 95
+}

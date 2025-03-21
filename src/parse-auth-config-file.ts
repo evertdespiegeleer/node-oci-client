@@ -17,7 +17,7 @@ export const getAuthFromConfigFile = (
     };
 
     let auth: RegistryAuthentication | undefined;
-    if (authConfig.auths[registry] != null) {
+    if (authConfig.auths != null && authConfig.auths[registry] != null) {
         auth = authConfig.auths[registry];
     } else {
         throw new Error(
